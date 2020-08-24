@@ -18,15 +18,13 @@
                 <button type="submit" onclick="<?php $result = inputCheck($_GET['enterWord']);?>" class="btn btn-primary">Check</button>
             </form>
             <div class="row ml-1 mt-5">
-                <?php 
-                    echo $result;
-                ?>
+                <?=$result;?>
             </div>
             </div>
             <div class="col-md-6">
             <div class="card-body">
                 <h5 class="card-title"><code>palindrome();</code></h5>
-                <pre class="scrollable bg-gradient-dark"><code>
+                <pre class="scrollable code-bg"><code>
     function palindrome($word){
         <var>$wordSmall</var> = strtolower($word);
         <var>$lastLetterPos</var> =  (strlen($wordSmall)-1);
