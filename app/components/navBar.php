@@ -15,7 +15,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="app/challenges.php">Simple Algorithm Challenges</a>
-          <a class="dropdown-item" href="#">Postgres Usage</a>
+          <a class="dropdown-item" href="app/prod_example.php">Product Example</a>
           <!-- <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Something else here</a> -->
         </div>
