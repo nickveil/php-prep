@@ -16,47 +16,84 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <form name="add" method="POST" action="prod_example.php">
+        <div class="modal-body">
+            
         
-      <form>
-        <div class="form-group">
-            <label for="inputProduct">Product</label>
-            <input type="Product" class="form-control" id="inputProduct">
+            <div class="form-group">
+                <label for="inputProduct">Product</label>
+                <input type="Product" class="form-control" name="inputProduct" id="inputProduct">
+            </div>
+            <div class="form-group">
+                <label for="inputDescription">Description</label>
+                <input type="Description" class="form-control" name="inputDescription" id="inputDescription">
+            </div>
+            <div class="form-group">
+                <label for="inputPrice">Price</label>
+                <input type="text" class="form-control" name="inputPrice" id="inputPrice" placeholder="$$$$">
+            </div>
+            <div class="form-group">
+                <label for="inputImage">Image URL</label>
+                <input type="text" class="form-control" name="inputImage" id="inputImage" placeholder="https://google.com">
+            </div>
         </div>
-        <div class="form-group">
-            <label for="inputDescription">Description</label>
-            <input type="Description" class="form-control" id="inputDescription">
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Add Product</button> <!-- use this button to add  -->
         </div>
-        <div class="form-group">
-            <label for="inputPrice">Price</label>
-            <input type="text" class="form-control" id="inputPrice" placeholder="$$$$">
-        </div>
-        <div class="form-group">
-            <label for="inputImage">Image URL</label>
-            <input type="text" class="form-control" id="inputImage" placeholder="https://google.com">
-        </div>
-        <button type="submit" class="btn btn-primary">Sign in</button>
-    </form>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Add Product</button> <!-- use this button to add  -->
-      </div>
+      </form>
     </div>
   </div>
 </div>
 
 
 
-<?php 
-include('../database.php');
 
-    $products = getProducts();
+
+<?php 
+    include('../database.php');
+
+    // function testPost () {
+    //     $sql = "INSERT INTO products (product_name, product_description, product_price,product_img) VALUES ('test3', 'testing', 2.34, 'https://images.unsplash.com/photo-1503602642458-232111445657?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80');";
+    //     $request = pg_query(getDb(), $sql);
+    // }
+
+    if(isset($_POST['inputProduct']) && isset($_POST['inputDescription']) && isset($_POST['inputPrice']) && isset($_POST['inputImage'])){
+        $safeName = htmlentities($_POST['inputProduct']);
+        $safeDescription = htmlentities($_POST['inputDescription']);
+        $safePrice = htmlentities($_POST['inputPrice']);
+        $safeImage = htmlentities( $_POST['inputImage']);
+        addProduct($safeName, $safeDescription, $safePrice, $safeImage);
+        // var_dump(addProduct($safeName, $safeDescription, $safePrice, $safeImage));
+    } else {
+        echo "Please complete all fields to add a product.";
+    }
+    
+
+    function addProduct($name, $description, $price, $url){
+        // var_dump($name);
+        // $sql = "INSERT INTO products (product_name, product_description, product_price,product_img) VALUES ('test3', 'testing', 2.34, 'https://images.unsplash.com/photo-1503602642458-232111445657?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80');";
+        $sql = "insert into products (product_name, product_description, product_price, product_img) VALUES (' " .$name."', '".$description."',". $price .", '". $url. "');";
+        $request = pg_query(getDB(), $sql);
+        // var_dump(addProduct($safeName, $safeDescription, $safePrice, $safeImage));
+        // if($query){
+        //     echo "Record Successful.";
+        // }else {
+        //     echo "nope.";
+        // }
+        return pg_fetch_all($request);
+    }
 
 ?>
+
 <div class="row">
-<?php foreach($products as $product){ ?>
+<?php 
+    
+    $products = getProducts();
+    if ($products == null){
+        echo "No products listed. Click add product to add.";
+    } else {
+        foreach($products as $product){ ?>
 
 
     <div class="col-4">
@@ -68,7 +105,6 @@ include('../database.php');
     </div>
 
 
-<?php } ?>
+<?php }} ?>
 </div>
-
 <?php require('components/html_foot.php'); ?>
